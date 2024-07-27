@@ -10,8 +10,8 @@ const userSchema = new Schema(
     },
     email: {
       type: String,
-      required: true, // Assuming email should be required
-      unique: true, // Assuming email should be unique
+      required: true,
+      unique: true,
     },
     password: {
       type: String,
@@ -21,8 +21,19 @@ const userSchema = new Schema(
       type: String,
       enum: ["student", "volunteer", "leader", "admin"],
     },
+    // New fields for volunteer details
+    slots: [{ type: String }], // e.g., ["Monday 10-12", "Wednesday 2-4"]
+    subjects: [{ type: String }], // e.g., ["Math", "Science"]
+    availability: {
+      // Assuming a simple array of time slots
+      type: [{ day: String, startTime: String, endTime: String }],
+    },
+    assignedStudent: { type: Schema.Types.ObjectId, ref: "Student" }, // Reference to a Student model
+
+    //For leaders
+    assignedVolunteers: [{ type: Schema.Types.ObjectId, ref: "User" }], // References to other volunteers
   },
-  { timestamps: true } // Added missing comma here
+  { timestamps: true }
 );
 
 const User = mongoose.model("User", userSchema);

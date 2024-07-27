@@ -13,6 +13,9 @@ const studentSchema = new Schema(
       required: true,
     },
     assignedVolunteer: { type: Schema.Types.ObjectId, ref: "User" }, // Reference to a Volunteer
+    lastBrief: {
+      type: [{ date: Date, content: String }],
+    },
   },
   { timestamps: true }
 );
