@@ -26,14 +26,19 @@ export const login = async (req, res) => {
 
 export const signup = async (req, res) => {
   try {
-    const { username, password, role } = req.body;
+    const { username, password, role, email } = req.body;
     const user = await User.findOne({ username });
     if (user) {
       return res.status(400).json({ error: "User already exists" });
     } else {
       var salt = bcrypt.genSaltSync(10);
       var hash = bcrypt.hashSync(password, salt);
-      const newUser = new User({ username, password: hash, role });
+      const newUser = new User({
+        username,
+        password: hash,
+        role,
+        email: email,
+      });
 
       if (newUser) {
         generateTokenAndSetCookie(newUser._id, res);
