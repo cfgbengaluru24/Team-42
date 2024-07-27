@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import useSignup from "../../hooks/useSignup";
+import { useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
   const { loading, signup } = useSignup();
@@ -10,10 +11,14 @@ const SignUp = () => {
     role: "volunteer", // default role set to "student"
   });
 
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     await signup(inputs);
+    navigate('/completeprofile');
   };
+
 
   return (
     <div>
