@@ -4,8 +4,11 @@ import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
 import Profile from "./pages/profile/Profile";
+import Volunteer from "./pages/volunteer/Volunteer";
 function App() {
   const { authUser } = useAuthContext();
+  const isVolunteer = authUser?.role === "volunteer";
+
   return (
     <>
       <Routes>
@@ -22,8 +25,12 @@ function App() {
           element={authUser ? <Navigate to="/" /> : <Signup />}
         />
         <Route
-        path="/completeprofile"
-        element={authUser? <Profile/>:<Navigate to='/'/>}
+          path="/completeprofile"
+          element={authUser ? <Profile /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/volunteerDashboard"
+          element={isVolunteer ? <Volunteer /> : null}
         />
       </Routes>
     </>
