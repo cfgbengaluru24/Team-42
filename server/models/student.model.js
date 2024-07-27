@@ -12,7 +12,11 @@ const studentSchema = new Schema(
       type: String,
       required: true,
     },
-    assignedVolunteer: { type: Schema.Types.ObjectId, ref: "User" }, // Reference to a Volunteer
+    schedule: {
+      type: [{ subject: String, day: String, Slot: String }],
+    },
+    assignedVolunteer: { type: Schema.Types.ObjectId, ref: "User" },
+    lastVolunteer: { type: Schema.Types.ObjectId, ref: "User" },
     lastBrief: {
       type: [{ date: Date, content: String }],
     },

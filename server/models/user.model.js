@@ -8,6 +8,9 @@ const userSchema = new Schema(
       required: true,
       unique: true,
     },
+    fullname: {
+      type: String,
+    },
     email: {
       type: String,
       required: true,
@@ -22,11 +25,10 @@ const userSchema = new Schema(
       enum: ["student", "volunteer", "leader", "admin"],
     },
     // New fields for volunteer details
-    slots: [{ type: String }], // e.g., ["Monday 10-12", "Wednesday 2-4"]
+    slot: [{ type: String }], // e.g., ["Monday 10-12", "Wednesday 2-4"]
     subjects: [{ type: String }], // e.g., ["Math", "Science"]
     availability: {
-      // Assuming a simple array of time slots
-      type: [{ day: String, startTime: String, endTime: String }],
+      type: Boolean,
     },
     assignedStudent: { type: Schema.Types.ObjectId, ref: "Student" }, // Reference to a Student model
 
