@@ -4,6 +4,5 @@ import { updateProfile } from "../controllers/profile.controller.js";
 
 const router = express.Router();
 
-router.get("/", protectRoute, getUsers);
 router.post("/updateProfile", protectRoute, updateProfile);
 export default router;
