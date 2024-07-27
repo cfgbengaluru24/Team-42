@@ -3,17 +3,23 @@ import User from "../models/user.model.js";
 
 const protectRoute = async (req, res, next) => {
   try {
-    const token = req.cookies.jwt;
-    if (!token) return res.status(401).json({ message: "Unauthorized" });
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = req.headers["x-user-id"];
+    if (!userId) {
+      console.log("No user ID provided in headers");
+      return res.status(401).json({ message: "Unauthorized" });
+    }
 
-    if (!decoded) return res.status(401).json({ message: "Unauthorized" });
-    const user = await User.findById(decoded.userId).select("-password");
-    if (!user) return res.status(401).json({ message: "Unauthorized" });
+    const user = await User.findById(userId).select("-password");
+    if (!user) {
+      console.log("User not found with provided ID");
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
     req.user = user;
     next();
   } catch (error) {
-    console.log(error);
+    console.log("Error in protectRoute middleware:", error);
+    res.status(500).json({ message: "Server Error" });
   }
 };
 
