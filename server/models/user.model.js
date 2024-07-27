@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+const { Schema } = mongoose;
 
-const userSchema = new mongoose.Schema(
+const userSchema = new Schema(
   {
     username: {
       type: String,
@@ -9,6 +10,8 @@ const userSchema = new mongoose.Schema(
     },
     email: {
       type: String,
+      required: true, // Assuming email should be required
+      unique: true, // Assuming email should be unique
     },
     password: {
       type: String,
@@ -17,10 +20,9 @@ const userSchema = new mongoose.Schema(
     role: {
       type: String,
       enum: ["student", "volunteer", "leader", "admin"],
-      default: "user",
     },
   },
-  { timestamps: true }
+  { timestamps: true } // Added missing comma here
 );
 
 const User = mongoose.model("User", userSchema);
