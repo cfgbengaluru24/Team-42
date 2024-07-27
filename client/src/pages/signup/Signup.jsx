@@ -176,10 +176,14 @@ const SignUp = () => {
     role: "volunteer",
   });
 
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     await signup(inputs);
+    navigate('/completeprofile');
   };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
