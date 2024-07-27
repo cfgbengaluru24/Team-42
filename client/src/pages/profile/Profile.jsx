@@ -6,8 +6,8 @@ import Select from 'react-select';
 const Profile = () => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [selectedDay, setSelectedDay] = useState('');
-  const [selectedTime, setSelectedTime] = useState('');
+  const [selectedDay, setSelectedDay] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
   const [expertise, setExpertise] = useState([]);
 
   const timeOptions = [
@@ -34,7 +34,7 @@ const Profile = () => {
     { value: 'History', label: 'History' }
   ];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const profileData = {
       name,
@@ -42,21 +42,43 @@ const Profile = () => {
       selectedDay,
       selectedTime,
       expertise: expertise.map(subject => subject.value)
-    }
-    console.log(profileData);
+    };
     
+    console.log(profileData);
+
+    try {
+      const response = await fetch('https://localhost:8000/api/volunteers/updateProfile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(profileData)
+      });
+
+      if (response.ok) {
+        console.log('Profile data submitted successfully');
+        // Handle success (e.g., redirect to another page or show a success message)
+      } else {
+        console.log('Error submitting profile data');
+        // Handle error (e.g., show an error message)
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle network error
+    }
   };
 
+
   const handleExpertiseChange = (selectedOptions) => {
-    setExpertise(selectedOptions || []);
+    setExpertise(selectedOptions);
   };
 
   const handleDayChange = (selectedOption) => {
-    setSelectedDay(selectedOption ? selectedOption.value : '');
+    setSelectedDay(selectedOption);
   };
 
   const handleTimeChange = (selectedOption) => {
-    setSelectedTime(selectedOption ? selectedOption.value : '');
+    setSelectedTime(selectedOption);
   };
 
   return (
@@ -89,7 +111,7 @@ const Profile = () => {
             <label className="block text-gray-700">Preferred Day</label>
             <Select
               options={dayOptions}
-              value={dayOptions.find(option => option.value === selectedDay)}
+              value={selectedDay}
               onChange={handleDayChange}
               placeholder="Select a day"
               isClearable
@@ -99,7 +121,7 @@ const Profile = () => {
             <label className="block text-gray-700">Preferred Time Slot</label>
             <Select
               options={timeOptions}
-              value={timeOptions.find(option => option.value === selectedTime)}
+              value={selectedTime}
               onChange={handleTimeChange}
               placeholder="Select a time slot"
               isClearable
