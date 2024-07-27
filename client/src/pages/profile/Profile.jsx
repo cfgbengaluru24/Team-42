@@ -1,36 +1,62 @@
 // src/Profile.js
 
 import React, { useState } from 'react';
+import Select from 'react-select';
 
 const Profile = () => {
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [timeSlots, setTimeSlots] = useState([]);
+  const [selectedDay, setSelectedDay] = useState('');
+  const [selectedTime, setSelectedTime] = useState('');
   const [expertise, setExpertise] = useState([]);
-  
-  const timeOptions = ['3.00 pm','4.00pm', '6.00pm', '7.00pm'];
-  const subjectOptions = ['Math', 'Science', 'English', 'History'];
+
+  const timeOptions = [
+    { value: '3.00 pm', label: '3.00 pm' },
+    { value: '4.00 pm', label: '4.00 pm' },
+    { value: '6.00 pm', label: '6.00 pm' },
+    { value: '7.00 pm', label: '7.00 pm' }
+  ];
+
+  const dayOptions = [
+    { value: 'Monday', label: 'Monday' },
+    { value: 'Tuesday', label: 'Tuesday' },
+    { value: 'Wednesday', label: 'Wednesday' },
+    { value: 'Thursday', label: 'Thursday' },
+    { value: 'Friday', label: 'Friday' },
+    { value: 'Saturday', label: 'Saturday' },
+    { value: 'Sunday', label: 'Sunday' }
+  ];
+
+  const subjectOptions = [
+    { value: 'Math', label: 'Math' },
+    { value: 'Science', label: 'Science' },
+    { value: 'English', label: 'English' },
+    { value: 'History', label: 'History' }
+  ];
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const profileData = { name, email, phone, timeSlots, expertise };
+    const profileData = {
+      name,
+      phone,
+      selectedDay,
+      selectedTime,
+      expertise: expertise.map(subject => subject.value)
+    }
     console.log(profileData);
-    // You can send profileData to the server here
+    
   };
 
-  const handleTimeSlotChange = (e) => {
-    const value = e.target.value;
-    setTimeSlots((prev) =>
-      prev.includes(value) ? prev.filter((slot) => slot !== value) : [...prev, value]
-    );
+  const handleExpertiseChange = (selectedOptions) => {
+    setExpertise(selectedOptions || []);
   };
 
-  const handleExpertiseChange = (e) => {
-    const value = e.target.value;
-    setExpertise((prev) =>
-      prev.includes(value) ? prev.filter((subject) => subject !== value) : [...prev, value]
-    );
+  const handleDayChange = (selectedOption) => {
+    setSelectedDay(selectedOption ? selectedOption.value : '');
+  };
+
+  const handleTimeChange = (selectedOption) => {
+    setSelectedTime(selectedOption ? selectedOption.value : '');
   };
 
   return (
@@ -48,16 +74,7 @@ const Profile = () => {
               required
             />
           </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Email Address</label>
-            <input
-              type="email"
-              className="w-full mt-2 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+        
           <div className="mb-4">
             <label className="block text-gray-700">Phone Number</label>
             <input
@@ -69,38 +86,34 @@ const Profile = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Preferred Time Slots</label>
-            {timeOptions.map((time) => (
-              <div key={time} className="mt-2">
-                <label className="inline-flex items-center">
-                  <input
-                    type="checkbox"
-                    className="form-checkbox"
-                    value={time}
-                    checked={timeSlots.includes(time)}
-                    onChange={handleTimeSlotChange}
-                  />
-                  <span className="ml-2">{time}</span>
-                </label>
-              </div>
-            ))}
+            <label className="block text-gray-700">Preferred Day</label>
+            <Select
+              options={dayOptions}
+              value={dayOptions.find(option => option.value === selectedDay)}
+              onChange={handleDayChange}
+              placeholder="Select a day"
+              isClearable
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Preferred Time Slot</label>
+            <Select
+              options={timeOptions}
+              value={timeOptions.find(option => option.value === selectedTime)}
+              onChange={handleTimeChange}
+              placeholder="Select a time slot"
+              isClearable
+            />
           </div>
           <div className="mb-4">
             <label className="block text-gray-700">Subject Expertise</label>
-            {subjectOptions.map((subject) => (
-              <div key={subject} className="mt-2">
-                <label className="inline-flex items-center">
-                  <input
-                    type="checkbox"
-                    className="form-checkbox"
-                    value={subject}
-                    checked={expertise.includes(subject)}
-                    onChange={handleExpertiseChange}
-                  />
-                  <span className="ml-2">{subject}</span>
-                </label>
-              </div>
-            ))}
+            <Select
+              options={subjectOptions}
+              value={expertise}
+              onChange={handleExpertiseChange}
+              placeholder="Select subjects"
+              isMulti
+            />
           </div>
           <div className="mb-4">
             <button
