@@ -24,11 +24,16 @@ const Navbar = () => {
         </a>
         <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center">
           {user.authUser.role === "volunteer" ? (
+            <>
             <a className="mr-5 hover:text-gray-900" href="/volunteerdashboard">
               Volunteer Dashboard
             </a>
+            <a className="mr-5 hover:text-gray-900" href="/profile">
+            Profile
+            </a>
+            </>
           ) : (
-            <a className="mr-5 hover:text-gray-900" href="leaderdashboard">
+            <a className="mr-5 hover:text-gray-900" href="/leaderdashboard">
               Leader Dashboard
             </a>
           )}

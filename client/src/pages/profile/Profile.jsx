@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
+import Navbar from "../../components/navbar/Navbar";
 const Profile = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -87,6 +88,8 @@ const Profile = () => {
   };
 
   return (
+    <>
+    <Navbar/>
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">
@@ -155,6 +158,7 @@ const Profile = () => {
         </form>
       </div>
     </div>
+    </>
   );
 };
 

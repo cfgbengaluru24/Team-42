@@ -30,8 +30,12 @@ function App() {
           element={authUser ? <Profile /> : <Navigate to="/" />}
         />
         <Route
-          path="/volunteerDashboard"
+          path="/volunteerdashboard"
           element={isVolunteer ? <Dashboard /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/profile"
+          element={isVolunteer ? <Profile /> : <Navigate to="/login" />}
         />
       </Routes>
     </>
