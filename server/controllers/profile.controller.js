@@ -2,7 +2,7 @@ import User from "../models/user.model.js";
 
 export const updateProfile = async (req, res) => {
   try {
-    const { fullname, day, slot, subjects } = req.body;
+    const { fullname, day, slot, subjects, phone } = req.body;
     const userId = req.user._id;
 
     if (!userId) {
@@ -16,18 +16,7 @@ export const updateProfile = async (req, res) => {
 
     if (fullname) user.fullname = fullname;
 
-    // Handle day and slot update
-    if (day && slot) {
-      const existingSlotIndex = user.slot.findIndex(
-        (s) => s.day === day && s.slot === slot
-      );
-      if (existingSlotIndex === -1) {
-        user.slot.push({ day, slot });
-      } else {
-        user.slot[existingSlotIndex] = { day, slot };
-      }
-    }
-
+    user.slot = slot;
     // Update subjects
     if (subjects && Array.isArray(subjects)) {
       user.subjects = subjects;
