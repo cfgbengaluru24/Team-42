@@ -2,7 +2,9 @@
 
 import React, { useState } from "react";
 import Select from "react-select";
+import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
+import Navbar from "../../components/navbar/Navbar";
 const Profile = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -10,6 +12,7 @@ const Profile = () => {
   const [selectedTime, setSelectedTime] = useState(null);
   const [expertise, setExpertise] = useState([]);
 
+  const navigate = useNavigate();
   const user = useAuthContext();
   const userId = user.authUser._id;
   const timeOptions = [
@@ -41,13 +44,11 @@ const Profile = () => {
     const profileData = {
       name,
       phone,
-      selectedDay,
-      selectedTime,
-      expertise: expertise.map((subject) => subject.value),
+      slot: selectedDay.value + " " + selectedTime.value,
+      subjects: expertise.map((subject) => subject.value),
     };
 
     console.log(profileData);
-    console.log(userId);
     try {
       const response = await fetch(
         "http://localhost:8000/api/volunteers/updateProfile",
@@ -63,7 +64,7 @@ const Profile = () => {
 
       if (response.ok) {
         console.log("Profile data submitted successfully");
-        // Handle success (e.g., redirect to another page or show a success message)
+        navigate("/");
       } else {
         console.log("Error submitting profile data");
         console.log(response);
@@ -87,6 +88,8 @@ const Profile = () => {
   };
 
   return (
+    <>
+    <Navbar/>
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">
@@ -155,6 +158,7 @@ const Profile = () => {
         </form>
       </div>
     </div>
+    </>
   );
 };
 

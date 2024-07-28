@@ -10,9 +10,15 @@ export const login = async (req, res) => {
       const isPasswordCorrect = bcrypt.compareSync(password, user.password);
       if (isPasswordCorrect) {
         generateTokenAndSetCookie(user._id, res);
-        res
-          .status(200)
-          .json({ _id: user._id, username: user.username, role: user.role });
+        res.status(200).json({
+          _id: user._id,
+          username: user.username,
+          role: user.role,
+          email: user.email,
+          subjects: user.subjects,
+          availability: user.availability,
+          assignedStudent: user.assignedStudent,
+        });
       } else {
         return res.status(400).json({ error: "Invalid credentials" });
       }
@@ -46,6 +52,8 @@ export const signup = async (req, res) => {
         res.status(201).json({
           _id: newUser._id,
           username: newUser.username,
+          role,
+          email: email,
         });
       }
     }
