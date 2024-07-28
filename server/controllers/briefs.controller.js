@@ -39,3 +39,19 @@ export const createBrief = async (req, res) => {
       .json({ message: "Internal Server Error", error: error.message });
   }
 };
+
+export const getBriefs = async (req, res) => {
+  try {
+    const student = await Student.findById(req.user.assignedStudent);
+
+    if (!student) {
+      return res.status(400).json({ message: "Assigned student not found" });
+    }
+
+    res.status(200).json({ briefs: student.lastBrief });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
+  }
+};

@@ -30,7 +30,7 @@ const userSchema = new Schema(
     // New fields for volunteer details
     slot: {
       type: String,
-    },
+    }, // e.g., ["Monday 10-12", "Wednesday 2-4"]
     subjects: [{ type: String }], // e.g., ["Math", "Science"]
     availability: {
       type: Boolean,
