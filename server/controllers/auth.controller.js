@@ -40,10 +40,10 @@ export const signup = async (req, res) => {
       var salt = bcrypt.genSaltSync(10);
       var hash = bcrypt.hashSync(password, salt);
       const newUser = new User({
-        _id: user._id,
-        username: user.username,
-        role: user.role,
-        email: user.email,
+        username,
+        password: hash,
+        role,
+        email: email,
         subjects: user.subjects,
         availability: user.availability,
         assignedStudent: user.assignedStudent,
