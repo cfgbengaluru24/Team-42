@@ -2,11 +2,21 @@ import Student from "../models/student.model.js";
 import User from "../models/user.model.js";
 
 // Helper function to check schedule overlap
-function isScheduleMatching(studentSchedule, volunteerSlot) {
-  // Log student schedule and volunteer slot for debugging
+function isScheduleMatching(studentSchedule, volunteerSlots) {
+  // Log student schedule and volunteer slots for debugging
   console.log("Student Schedule:", studentSchedule);
-  console.log("Volunteer Slot:", volunteerSlot);
-  return studentSchedule.some(schedule => volunteerSlot.includes(schedule));
+  console.log("Volunteer Slots:", volunteerSlots);
+
+  const matchingSlot = studentSchedule.some(schedule => {
+    console.log(`Checking if student schedule '${schedule}' matches any volunteer slot...`);
+    return volunteerSlots.some(slot => {
+      console.log(`Comparing student schedule '${schedule}' with volunteer slot '${slot}'`);
+      return slot.trim() === schedule.trim(); // Trim whitespace and ensure exact match
+    });
+  });
+
+  console.log(`Is there a matching slot? ${matchingSlot}`);
+  return matchingSlot;
 }
 
 export const assignVolunteers = async (req, res) => {
@@ -47,15 +57,19 @@ export const assignVolunteers = async (req, res) => {
     const availableVolunteers = await User.find({
       role: "volunteer",
       subjects: { $in: student.schedule.map(s => s.subject) }, // Match subjects
-      slot: { $exists: true }
+      slots: { $exists: true } // Ensure slots exist
     });
 
     console.log("Available volunteers count:", availableVolunteers.length);
 
     // Filter volunteers based on schedule
-    const eligibleVolunteers = availableVolunteers.filter(volunteer =>
-      isScheduleMatching(studentSchedule, volunteer.slot)
-    );
+    const eligibleVolunteers = availableVolunteers.filter(volunteer => {
+      console.log("Evaluating volunteer:", volunteer.username);
+      console.log("Volunteer Slots:", volunteer.slots); // Log volunteer slots
+      return isScheduleMatching(studentSchedule, volunteer.slots);
+    });
+
+    console.log("Eligible volunteers count:", eligibleVolunteers.length);
 
     if (eligibleVolunteers.length === 0) {
       return res.status(404).json({ error: "No matching volunteer found" });
