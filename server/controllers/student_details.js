@@ -6,7 +6,7 @@ export const student_details = async (req, res) => {
     const { slot } = req.body;
 
     // Correcting the query to match the provided data structure
-    const students = await Student.find({ 'schedule.slot': slot })
+    const students = await Student.find({ 'schedule.Slot': slot })
       .populate('assignedVolunteer', 'username email')
       .populate('lastVolunteer', 'username email');
 
@@ -21,7 +21,7 @@ export const student_details = async (req, res) => {
       } : null,
       lastVolunteer: student.lastVolunteer ? {
         name: student.lastVolunteer.username,
-        email: student.lastVolunteer.email
+        email: student.lastVolunteer.email``
       } : null,
     }));
 
