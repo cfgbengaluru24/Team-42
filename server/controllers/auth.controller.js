@@ -44,9 +44,6 @@ export const signup = async (req, res) => {
         password: hash,
         role,
         email: email,
-        subjects: user.subjects,
-        availability: user.availability,
-        assignedStudent: user.assignedStudent,
       });
 
       if (newUser) {
@@ -57,9 +54,6 @@ export const signup = async (req, res) => {
           username: newUser.username,
           role,
           email: email,
-          subjects: user.subjects,
-          availability: user.availability,
-          assignedStudent: user.assignedStudent,
         });
       }
     }

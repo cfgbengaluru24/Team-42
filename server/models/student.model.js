@@ -3,11 +3,6 @@ const { Schema } = mongoose;
 
 const studentSchema = new Schema(
   {
-    student_ID: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     name: {
       type: String,
       required: true,

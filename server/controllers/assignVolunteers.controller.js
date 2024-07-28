@@ -41,15 +41,19 @@ export const assignVolunteers = async (req, res) => {
     console.log("Student found:", student);
 
     // Get the student's schedule in the correct format
-    const studentSchedule = student.schedule.map(s => `${s.day} ${s.Slot}`);
+    const studentSchedule = student.schedule.map((s) => `${s.day} ${s.Slot}`);
 
     // **New Code Start**
     // Fetch and print schedules of all students for debugging
     const allStudents = await Student.find();
     console.log("Printing all students' schedules for debugging:");
-    allStudents.forEach(student => {
-      const schedule = student.schedule.map(s => `${s.day} ${s.Slot}`);
-      console.log(`Student ID: ${student._id}, Name: ${student.name}, Schedule: ${schedule.join(", ")}`);
+    allStudents.forEach((student) => {
+      const schedule = student.schedule.map((s) => `${s.day} ${s.Slot}`);
+      console.log(
+        `Student ID: ${student._id}, Name: ${
+          student.name
+        }, Schedule: ${schedule.join(", ")}`
+      );
     });
     // **New Code End**
 
@@ -76,12 +80,16 @@ export const assignVolunteers = async (req, res) => {
     }
 
     // Randomly select a volunteer
-    const selectedVolunteer = eligibleVolunteers[Math.floor(Math.random() * eligibleVolunteers.length)];
+    const selectedVolunteer =
+      eligibleVolunteers[Math.floor(Math.random() * eligibleVolunteers.length)];
 
     // Assign the selected volunteer to the student
     student.assignedVolunteer = selectedVolunteer._id;
     selectedVolunteer.assignedStudent = student._id;
 
+    User.findByIdAndUpdate(selectedVolunteer._id, {
+      assignedStudent: student._id,
+    });
     await student.save();
     await selectedVolunteer.save();
 
@@ -90,13 +98,13 @@ export const assignVolunteers = async (req, res) => {
       student: {
         id: student._id,
         name: student.name,
-        assignedVolunteer: selectedVolunteer._id
+        assignedVolunteer: selectedVolunteer._id,
       },
       volunteer: {
         id: selectedVolunteer._id,
         username: selectedVolunteer.username,
-        assignedStudent: student._id
-      }
+        assignedStudent: student._id,
+      },
     });
   } catch (error) {
     console.error("Error matching student with volunteer:", error);
