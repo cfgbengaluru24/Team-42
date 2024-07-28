@@ -1,33 +1,13 @@
-import { Route, Routes, Navigate } from "react-router-dom";
-import { useAuthContext } from "./context/AuthContext";
-import Home from "./pages/home/Home";
-import Login from "./pages/login/Login";
-import Signup from "./pages/signup/Signup";
-import Profile from "./pages/profile/Profile";
-function App() {
-  const { authUser } = useAuthContext();
+import React from 'react';
+import RouterConfig from './pages/routerconfig/Routerconfig';
+import { AuthContextProvider } from './context/AuthContext'; 
+
+const App = () => {
   return (
-    <>
-      <Routes>
-        <Route
-          path="/"
-          element={authUser ? <Home /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/login"
-          element={authUser ? <Navigate to="/" /> : <Login />}
-        />
-        <Route
-          path="/signup"
-          element={authUser ? <Navigate to="/" /> : <Signup />}
-        />
-        <Route
-        path="/completeprofile"
-        element={authUser? <Profile/>:<Navigate to='/'/>}
-        />
-      </Routes>
-    </>
+    <AuthContextProvider>
+      <RouterConfig />
+    </AuthContextProvider>
   );
-}
+};
 
 export default App;
