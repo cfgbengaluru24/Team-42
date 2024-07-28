@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Select from "react-select";
+import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
 const Profile = () => {
   const [name, setName] = useState("");
@@ -10,6 +11,7 @@ const Profile = () => {
   const [selectedTime, setSelectedTime] = useState(null);
   const [expertise, setExpertise] = useState([]);
 
+  const navigate = useNavigate();
   const user = useAuthContext();
   const userId = user.authUser._id;
   const timeOptions = [
@@ -41,13 +43,11 @@ const Profile = () => {
     const profileData = {
       name,
       phone,
-      selectedDay,
-      selectedTime,
-      expertise: expertise.map((subject) => subject.value),
+      slot: selectedDay.value + " " + selectedTime.value,
+      subjects: expertise.map((subject) => subject.value),
     };
 
     console.log(profileData);
-    console.log(userId);
     try {
       const response = await fetch(
         "http://localhost:8000/api/volunteers/updateProfile",
@@ -63,7 +63,7 @@ const Profile = () => {
 
       if (response.ok) {
         console.log("Profile data submitted successfully");
-        // Handle success (e.g., redirect to another page or show a success message)
+        navigate("/");
       } else {
         console.log("Error submitting profile data");
         console.log(response);

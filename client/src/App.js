@@ -4,7 +4,8 @@ import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import Signup from "./pages/signup/Signup";
 import Profile from "./pages/profile/Profile";
-import Volunteer from "./pages/volunteer/Volunteer";
+import Dashboard from "./pages/volunteerdashboard/Dashboard";
+
 function App() {
   const { authUser } = useAuthContext();
   const isVolunteer = authUser?.role === "volunteer";
@@ -30,7 +31,7 @@ function App() {
         />
         <Route
           path="/volunteerDashboard"
-          element={isVolunteer ? <Volunteer /> : null}
+          element={isVolunteer ? <Dashboard /> : <Navigate to="/login" />}
         />
       </Routes>
     </>
